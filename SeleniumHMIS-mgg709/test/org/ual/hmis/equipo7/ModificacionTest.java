@@ -26,12 +26,16 @@ import java.net.URL;
 public class ModificacionTest {
   private WebDriver driver;
   private Map<String, Object> vars;
+  private int browser = 0;
   JavascriptExecutor js;
   @Before
   public void setUp() {
 	System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe");
 	System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-    driver = new ChromeDriver();
+	
+	browser = 0; //Chrome: 0 | Firefox: 1		
+	driver = browser == 0 ? new ChromeDriver() : new FirefoxDriver();
+	
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
@@ -47,7 +51,8 @@ public class ModificacionTest {
     vars.put("descripcionRandom", js.executeScript("return \"hmis-\" + Math.floor(Math.random()*1500000)"));
     driver.findElement(By.id("Description")).click();
     driver.findElement(By.id("Description")).sendKeys(vars.get("descripcionRandom").toString());
-    driver.findElement(By.id("CreatedDate")).sendKeys("04/04/2022"); //04/04/2022
+    String fecha = browser == 0 ? "04-04-2022" : "2022-04-04";
+    driver.findElement(By.id("CreatedDate")).sendKeys(fecha);
     driver.findElement(By.cssSelector(".btn")).click();
     vars.put("descripcionRandom", js.executeScript("return \"hmis-\" + Math.floor(Math.random()*1500000)"));
     vars.put("nRows", driver.findElements(By.xpath("//tbody/tr")).size());
@@ -68,13 +73,15 @@ public class ModificacionTest {
     vars.put("descripcionRandom", js.executeScript("return \"hmis-\" + Math.floor(Math.random()*1500000)"));
     driver.findElement(By.id("Description")).click();
     driver.findElement(By.id("Description")).sendKeys(vars.get("descripcionRandom").toString());
-    driver.findElement(By.id("CreatedDate")).sendKeys("04/04/2022");
+    String fecha = browser == 0 ? "04-04-2022" : "2022-04-04";
+    driver.findElement(By.id("CreatedDate")).sendKeys(fecha);
     driver.findElement(By.cssSelector(".btn")).click();
     vars.put("nRows", driver.findElements(By.xpath("//tbody/tr")).size());
-    driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("nRows").toString() + ") a:nth-child(1)")).click(); //CAMBIO
+    driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("nRows").toString() + ") a:nth-child(1)")).click();
     driver.findElement(By.id("CreatedDate")).click();
     driver.findElement(By.id("CreatedDate")).clear();
-    driver.findElement(By.id("CreatedDate")).sendKeys("01/01/2022");
+    fecha = browser == 0 ? "01-01-2022" : "2022-01-01";
+    driver.findElement(By.id("CreatedDate")).sendKeys(fecha);
     driver.findElement(By.cssSelector(".btn")).click();
     assertThat(driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("nRows").toString() + ") > td:nth-child(2)")).getText(), is("2022-01-01"));
     driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("nRows").toString() + ") a:nth-child(3)")).click();
@@ -88,7 +95,8 @@ public class ModificacionTest {
     vars.put("descripcionRandom", js.executeScript("return \"hmis-\" + Math.floor(Math.random()*1500000)"));
     driver.findElement(By.id("Description")).click();
     driver.findElement(By.id("Description")).sendKeys(vars.get("descripcionRandom").toString());
-    driver.findElement(By.id("CreatedDate")).sendKeys("04/04/2022");
+    String fecha = browser == 0 ? "04-04-2022" : "2022-04-04";
+    driver.findElement(By.id("CreatedDate")).sendKeys(fecha);
     driver.findElement(By.cssSelector(".btn")).click();
     vars.put("nRows", driver.findElements(By.xpath("//tbody/tr")).size());
     driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("nRows").toString() + ") a:nth-child(1)")).click();
@@ -112,7 +120,8 @@ public class ModificacionTest {
     vars.put("descripcionRandom", js.executeScript("return \"hmis-\" + Math.floor(Math.random()*1500000)"));
     driver.findElement(By.id("Description")).click();
     driver.findElement(By.id("Description")).sendKeys(vars.get("descripcionRandom").toString());
-    driver.findElement(By.id("CreatedDate")).sendKeys("04/04/2022");
+    String fecha = browser == 0 ? "04-04-2022" : "2022-04-04";
+    driver.findElement(By.id("CreatedDate")).sendKeys(fecha);
     driver.findElement(By.cssSelector(".btn")).click();
     vars.put("nRows", driver.findElements(By.xpath("//tbody/tr")).size());
     vars.put("descripcion", driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("nRows").toString() + ") > td:nth-child(1)")).getText());

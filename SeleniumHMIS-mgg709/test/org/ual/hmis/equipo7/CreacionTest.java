@@ -24,17 +24,21 @@ import org.openqa.selenium.Keys;
 import java.util.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
 
 public class CreacionTest {
   private WebDriver driver;
   private Map<String, Object> vars;
+  private int browser = 0;
   JavascriptExecutor js;
   @Before
   public void setUp() {
 		System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe");
 		System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
 		
-		driver = new ChromeDriver();
+		browser = 0; //Chrome: 0 | Firefox: 1		
+		driver = browser == 0 ? new ChromeDriver() : new FirefoxDriver();
+
 		js = (JavascriptExecutor) driver;
 		vars = new HashMap<String, Object>();
   }
@@ -59,7 +63,8 @@ public class CreacionTest {
     // 6 | type | id=Description | ${descripcionRandom}
     driver.findElement(By.id("Description")).sendKeys(vars.get("descripcionRandom").toString());
     // 7 | type | id=CreatedDate | 2022-04-04
-    driver.findElement(By.id("CreatedDate")).sendKeys("04/04/2022");
+    String fecha = browser == 0 ? "04-04-2022" : "2022-04-04";
+    driver.findElement(By.id("CreatedDate")).sendKeys(fecha);
     // 8 | click | css=.btn | 
     driver.findElement(By.cssSelector(".btn")).click();
     // 9 | assertText | xpath=//tr[last()]/td[1] | ${descripcionRandom}
