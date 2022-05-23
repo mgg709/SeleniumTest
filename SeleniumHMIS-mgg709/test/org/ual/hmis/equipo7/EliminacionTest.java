@@ -25,7 +25,7 @@ import java.util.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class CreacionTest {
+public class EliminacionTest {
   private WebDriver driver;
   private Map<String, Object> vars;
   JavascriptExecutor js;
@@ -43,8 +43,8 @@ public class CreacionTest {
     driver.quit();
   }
   @Test
-  public void creacionTareaCorrecto() {
-    // Test name: CreacionTarea-Correcto
+  public void eliminacinCasoCorrecto() {
+    // Test name: Eliminación-CasoCorrecto
     // Step # | name | target | value
     // 1 | open | http://coresqlmgg.azurewebsites.net/ | 
     driver.get("http://coresqlmgg.azurewebsites.net/");
@@ -62,47 +62,63 @@ public class CreacionTest {
     driver.findElement(By.id("CreatedDate")).sendKeys("04/04/2022");
     // 8 | click | css=.btn | 
     driver.findElement(By.cssSelector(".btn")).click();
-    // 9 | assertText | xpath=//tr[last()]/td[1] | ${descripcionRandom}
-    assertThat(driver.findElement(By.xpath("//tr[last()]/td[1]")).getText(), is(vars.get("descripcionRandom").toString()));
-    // 10 | storeXpathCount | xpath=//tbody/tr | RowsPrev
+    // 9 | storeXpathCount | xpath=//tbody/tr | RowsPrev
     vars.put("RowsPrev", driver.findElements(By.xpath("//tbody/tr")).size());
-    // 11 | click | css=tr:nth-child(${RowsPrev}) a:nth-child(3) | 
+    // 10 | click | css=tr:nth-child(${RowsPrev}) a:nth-child(3) | 
     driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("RowsPrev").toString() + ") a:nth-child(3)")).click();
-    // 12 | click | css=.btn | 
+    // 11 | click | css=.btn | 
     driver.findElement(By.cssSelector(".btn")).click();
-  }
-  @Test
-  public void creacionTareaIncorrecto() {
-    // Test name: CreacionTarea-Incorrecto
-    // Step # | name | target | value
-    // 1 | open | http://coresqlmgg.azurewebsites.net/ | 
-    driver.get("http://coresqlmgg.azurewebsites.net/");
-    // 2 | setWindowSize | 1552x832 | 
-    driver.manage().window().setSize(new Dimension(1552, 832));
-    // 3 | storeXpathCount | xpath=//tbody/tr | RowsPrev
-    vars.put("RowsPrev", driver.findElements(By.xpath("//tbody/tr")).size());
-    // 4 | click | linkText=Create New | 
-    driver.findElement(By.linkText("Create New")).click();
-    // 5 | click | id=Description | 
-    driver.findElement(By.id("Description")).click();
-    // 6 | type | id=Description | TareaInexistente
-    driver.findElement(By.id("Description")).sendKeys("TareaInexistente");
-    // 7 | click | css=.btn | 
-    driver.findElement(By.cssSelector(".btn")).click();
-    // 8 | click | linkText=Back to List | 
-    driver.findElement(By.linkText("Back to List")).click();
-    // 9 | assertNotText | xpath=//tr[last()]/td[1] | TareaInexistente
+    // 12 | storeXpathCount | xpath=//tbody/tr | RowsLater
+    vars.put("RowsLater", driver.findElements(By.xpath("//tbody/tr")).size());
+    // 13 | executeScript | return parseInt(${RowsPrev}) - parseInt(1) | NewRows
+    vars.put("NewRows", js.executeScript("return parseInt(arguments[0]) - parseInt(1)", vars.get("RowsPrev")));
+    // 14 | assert | RowsLater | ${NewRows} 
+    assertEquals(vars.get("RowsLater").toString(), vars.get("NewRows").toString());
+    // 15 | assertNotText | xpath=//tr[last()]/td[1] | ${descripcionRandom}
     boolean correcto = false;
     try {
-    	correcto = driver.findElement(By.xpath("//tr[last()]/td[1]")).getText() != "TareaInexistente";
+    	correcto = driver.findElement(By.xpath("//tr[last()]/td[1]")).getText() != vars.get("descripcionRandom").toString();
     }
     catch (org.openqa.selenium.NoSuchElementException e) {
 		correcto = true;
 	}
     assertTrue(correcto);
-    // 10 | storeXpathCount | xpath=//tbody/tr | RowsLater
+  }
+  @Test
+  public void eliminacinCasoIncorrectoCancelado() {
+    // Test name: Eliminación-CasoIncorrecto-Cancelado
+    // Step # | name | target | value
+    // 1 | open | http://coresqlmgg.azurewebsites.net/ | 
+    driver.get("http://coresqlmgg.azurewebsites.net/");
+    // 2 | setWindowSize | 968x1039 | 
+    driver.manage().window().setSize(new Dimension(968, 1039));
+    // 3 | executeScript | return "hmis-" + Math.floor(Math.random()*1500000) | descripcionRandom
+    vars.put("descripcionRandom", js.executeScript("return \"hmis-\" + Math.floor(Math.random()*1500000)"));
+    // 4 | click | linkText=Create New | 
+    driver.findElement(By.linkText("Create New")).click();
+    // 5 | click | id=Description | 
+    driver.findElement(By.id("Description")).click();
+    // 6 | type | id=Description | ${descripcionRandom}
+    driver.findElement(By.id("Description")).sendKeys(vars.get("descripcionRandom").toString());
+    // 7 | type | id=CreatedDate | 2001-01-25
+    driver.findElement(By.id("CreatedDate")).sendKeys("25/01/2001");
+    // 8 | click | css=.btn | 
+    driver.findElement(By.cssSelector(".btn")).click();
+    // 9 | storeXpathCount | xpath=//tbody/tr | RowsPrev
+    vars.put("RowsPrev", driver.findElements(By.xpath("//tbody/tr")).size());
+    // 10 | click | css=tr:nth-child(${RowsPrev}) a:nth-child(3) | 
+    driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("RowsPrev").toString() + ") a:nth-child(3)")).click();
+    // 11 | click | linkText=Back to List | 
+    driver.findElement(By.linkText("Back to List")).click();
+    // 12 | storeXpathCount | xpath=//tbody/tr | RowsLater
     vars.put("RowsLater", driver.findElements(By.xpath("//tbody/tr")).size());
-    // 11 | assert | RowsLater | ${RowsPrev} 
+    // 13 | assert | RowsLater | ${RowsPrev} 
     assertEquals(vars.get("RowsLater").toString(), vars.get("RowsPrev").toString());
+    // 14 | assertText | xpath=//tr[last()]/td[1] | ${descripcionRandom}
+    assertThat(driver.findElement(By.xpath("//tr[last()]/td[1]")).getText(), is(vars.get("descripcionRandom").toString()));
+    // 15 | click | css=tr:nth-child(${RowsLater}) a:nth-child(3) | 
+    driver.findElement(By.cssSelector("tr:nth-child(" + vars.get("RowsLater").toString() + ") a:nth-child(3)")).click();
+    // 16 | click | css=.btn | 
+    driver.findElement(By.cssSelector(".btn")).click();
   }
 }
