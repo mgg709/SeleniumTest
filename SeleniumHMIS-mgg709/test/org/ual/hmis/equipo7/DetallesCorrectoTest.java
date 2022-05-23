@@ -35,7 +35,7 @@ public class DetallesCorrectoTest {
 		//System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe");
 		System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
 		
-		browser = 0; //Chrome: 0 | Firefox: 1		
+		browser = 1; //Chrome: 0 | Firefox: 1		
 		driver = browser == 0 ? new ChromeDriver() : new FirefoxDriver();
 		
 		js = (JavascriptExecutor) driver;
