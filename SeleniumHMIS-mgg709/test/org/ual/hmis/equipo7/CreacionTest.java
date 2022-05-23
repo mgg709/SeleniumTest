@@ -33,7 +33,7 @@ public class CreacionTest {
   JavascriptExecutor js;
   @Before
   public void setUp() {
-		System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe");
+		//System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe");
 		System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
 		
 		browser = 0; //Chrome: 0 | Firefox: 1		
