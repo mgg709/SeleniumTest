@@ -10,7 +10,9 @@ import static org.hamcrest.core.IsNot.not;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.Dimension;
@@ -34,9 +36,13 @@ public class DetallesCorrectoTest {
   public void setUp() {
 		//System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe");
 		System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
+		ChromeOptions chromeOptions = new ChromeOptions(); 
+	    chromeOptions.setHeadless(true);
+	    FirefoxOptions firefoxOptions = new FirefoxOptions(); 
+	    firefoxOptions.setHeadless(true); 
 		
 		browser = 1; //Chrome: 0 | Firefox: 1		
-		driver = browser == 0 ? new ChromeDriver() : new FirefoxDriver();
+		driver = browser == 0 ? new ChromeDriver(chromeOptions) : new FirefoxDriver(firefoxOptions);
 		
 		js = (JavascriptExecutor) driver;
 		vars = new HashMap<String, Object>();
