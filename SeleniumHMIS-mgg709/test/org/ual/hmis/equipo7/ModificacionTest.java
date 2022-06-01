@@ -56,7 +56,7 @@ public class ModificacionTest {
 			FirefoxOptions firefoxOptions = new FirefoxOptions();
 			if (headless) firefoxOptions.setHeadless(headless);
 			driver = new FirefoxDriver(firefoxOptions);
-			browser = 0;
+			browser = 1;
 
 			break;
 		case "chrome": 
@@ -69,7 +69,7 @@ public class ModificacionTest {
 			if (headless) chromeOptions.setHeadless(headless);
 			chromeOptions.addArguments("window-size=1920,1080");
 			driver = new ChromeDriver(chromeOptions);
-			browser = 1;
+			browser = 0;
 
 			break;
 
