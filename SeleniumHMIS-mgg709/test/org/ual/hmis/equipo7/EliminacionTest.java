@@ -111,7 +111,7 @@ public class EliminacionTest {
     // 6 | type | id=Description | ${descripcionRandom}
     driver.findElement(By.id("Description")).sendKeys(vars.get("descripcionRandom").toString());
     // 7 | type | id=CreatedDate | 2001-01-25
-    String fecha = browser == 0 ? "25-01-2001" : "2001-01-25";
+    String fecha = browser == 0 ? "04-04-2022" : "2022-04-04";
     driver.findElement(By.id("CreatedDate")).sendKeys(fecha);
     // 8 | click | css=.btn | 
     driver.findElement(By.cssSelector(".btn")).click();
