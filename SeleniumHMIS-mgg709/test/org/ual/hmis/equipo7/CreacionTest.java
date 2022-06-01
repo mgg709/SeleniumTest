@@ -35,16 +35,51 @@ public class CreacionTest {
   JavascriptExecutor js;
   @Before
   public void setUp() {
-		// System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe");
-		// System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-		ChromeOptions chromeOptions = new ChromeOptions(); 
-	    chromeOptions.setHeadless(true);
-	    FirefoxOptions firefoxOptions = new FirefoxOptions(); 
-	    firefoxOptions.setHeadless(true); 
-	    
-		browser = 1; //Chrome: 0 | Firefox: 1		
-		driver = browser == 0 ? new ChromeDriver(chromeOptions) : new FirefoxDriver(firefoxOptions);
+	  String browserProperty = ""; 
+		Boolean headless = false;
+		
+		try {
+			browserProperty= System.getProperty("browserWebDriver");
+		
+			// run headless: clean test -DbrowserWebDriver=firefox -Dheadless=true
+			if (System.getProperty("headless").equals("true")) {
+				headless = true;
+			}
+		}catch(Exception e) {
+			fail("Error en parámetros llamada a maven");
+		}
 
+		switch (browserProperty) {
+		case "firefox": 
+			// Firefox 
+			// Descargar geckodriver de https://github.com/mozilla/geckodriver/releases
+			// Descomprimir el archivo geckodriver.exe en la carpeta drivers
+
+			System.setProperty("webdriver.gecko.driver",  "drivers/geckodriver.exe");
+			FirefoxOptions firefoxOptions = new FirefoxOptions();
+			if (headless) firefoxOptions.setHeadless(headless);
+			driver = new FirefoxDriver(firefoxOptions);
+			browser = 0;
+
+			break;
+		case "chrome": 
+			// Chrome
+			// Descargar Chromedriver de https://chromedriver.chromium.org/downloads
+			// Descomprimir el archivo chromedriver.exe en la carpeta drivers
+
+			System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
+			ChromeOptions chromeOptions = new ChromeOptions();
+			if (headless) chromeOptions.setHeadless(headless);
+			chromeOptions.addArguments("window-size=1920,1080");
+			driver = new ChromeDriver(chromeOptions);
+			browser = 1;
+
+			break;
+
+		default:
+			fail("Please select a browser");
+			break;
+		}
 		js = (JavascriptExecutor) driver;
 		vars = new HashMap<String, Object>();
   }
